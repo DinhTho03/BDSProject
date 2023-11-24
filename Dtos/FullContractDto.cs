@@ -36,5 +36,6 @@ namespace dotnet_rpg.Dtos
 
         [Required]
         public bool Status { get; set; }
+        
     }
 }

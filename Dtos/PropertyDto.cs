@@ -9,13 +9,9 @@ namespace dotnet_rpg.Dtos
         [StringLength(50)]
         public string Property_Name { get; set; }
 
-        [Required]
-        public int Property_Type_ID { get; set; }
 
         public string Description { get; set; }
 
-        [Required]
-        public int District_ID { get; set; }
 
         [StringLength(100)]
         public string Address { get; set; }
@@ -34,9 +30,15 @@ namespace dotnet_rpg.Dtos
         public string Avatar { get; set; }
 
         public string Album { get; set; }
-
         [Required]
-        public int Property_Status_ID { get; set; }
+        public string Service_Name { get; set; }
+        [Required]
+        public string City_Name { get; set; }
+        [Required]
+        public string District_Name { get; set; }
+        [Required]
+        public string Status { get; set; }
+        public string Type { get; set;}
 
 
     }

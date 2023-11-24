@@ -31,6 +31,8 @@ namespace dotnet_rpg.Services
                 Status = contract.Status,
             };
 
+            
+
             int id = fullContractEntity.ID; 
 
             string namHienTai = DateTime.Now.ToString("yy");

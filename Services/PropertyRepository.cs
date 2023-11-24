@@ -2,6 +2,7 @@
 using dotnet_rpg.Dtos;
 using dotnet_rpg.IService;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Diagnostics.Contracts;
 
 namespace dotnet_rpg.Services
 {
@@ -16,13 +17,51 @@ namespace dotnet_rpg.Services
 
         public Property Add(PropertyDto property)
         {
+            // Create City
+            var city = new City { City_Name = property.City_Name };
+            _dataContext.Cities.Add(city);
+            _dataContext.SaveChanges();
 
+            // Create District
+            var district = new District
+            {
+                District_Name = property.District_Name,
+                City_Id = city.Id
+            };
+            _dataContext.Districts.Add(district);
+            _dataContext.SaveChanges();
+
+            // Create Service
+            var service = new Service
+            {
+                Service_Name = property.Service_Name,
+            };
+            _dataContext.Services.Add(service);
+            _dataContext.SaveChanges();
+
+            // Create Property_Status
+            var status = new Property_Status
+            {
+                Property_Status_Name = property.Status
+            };
+            _dataContext.Property_Statuses.Add(status);
+            _dataContext.SaveChanges();
+
+            // Create Property_Type
+            var type = new Property_Type
+            {
+                Property_Type_Name = property.Type,
+                Property_Amount = 1,
+            };
+            _dataContext.property_Types.Add(type);
+            _dataContext.SaveChanges();
+
+            // Create Property entity
             var propertyEntity = new Property
             {
                 Property_Name = property.Property_Name,
-                Property_Type_ID = property.Property_Type_ID,
+                Property_Type_ID = type.Id,
                 Description = property.Description,
-                District_ID = property.District_ID,
                 Address = property.Address,
                 Area = property.Area,
                 Bed_Room = property.Bed_Room,
@@ -31,32 +70,26 @@ namespace dotnet_rpg.Services
                 Album = property.Album,
                 Avatar = property.Avatar,
                 Installment_Rate = property.Installment_Rate,
-                Property_Status_ID = property.Property_Status_ID,
+                District_ID = district.Id,
+                Property_Status_ID = status.ID,
             };
-            
-            int id = propertyEntity.ID;
 
+            // Generate Property Code
             string namHienTai = DateTime.Now.ToString("yy");
-
-            int max;
-            if (_dataContext.Properties.Any())
-            {
-                max = _dataContext.Properties
+            int max =  _dataContext.Properties
                     .AsEnumerable() // Switch to in-memory processing
                     .Max(p => int.Parse(p.Property_Code.Substring(4))) + 1;
-            }
-            else
-            {
-                max = 1;
-            }
 
-            string msBDS = $"F{namHienTai}{max:D4}"; 
-
+            string msBDS = $"F{namHienTai}{max:D4}";
             propertyEntity.Property_Code = msBDS;
-            _dataContext.Add(propertyEntity);
+
+            // Add Property entity to the database
+            _dataContext.Properties.Add(propertyEntity);
             _dataContext.SaveChanges();
+
             return propertyEntity;
         }
+
 
         public List<Property> GetAll()
         {
