@@ -58,7 +58,7 @@ namespace dotnet_rpg.Services
             return fullContractEntity;
         }
 
-
+         
         public List<Full_Contract> GetFull_Contracts()
         {
             return _dataContext.Full_Contract.ToList();

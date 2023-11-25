@@ -19,7 +19,7 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<IProperty, PropertyRepository>();
 builder.Services.AddScoped<IFullContract, FullContractRepository>();
 builder.Services.AddHttpContextAccessor();
-
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -29,7 +29,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors(options =>
+{
+    options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+});
 app.UseHttpsRedirection();
 
 app.MapControllers();
